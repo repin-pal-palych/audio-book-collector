@@ -7,13 +7,38 @@ import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import static com.repin.audiobookcollector.model.Book.Builder.book;
 
-public class AknigaBookSiteParser implements BookSiteParser {
+public class AknigaBookSiteCollector implements BookSiteCollector {
+
+    private final PageLoader pageLoader;
+
+    public AknigaBookSiteCollector() {
+        this.pageLoader = new PageLoader();
+    }
 
     @Override
-    public Collection<Book> parsePage(Document htmlPage) {
+    public Collection<Book> collectPages(String baseUrl, Integer pagesToLoad) {
+        List<Book> allBooks = new ArrayList<>();
+
+        for (int i = 1; i <= pagesToLoad; i++) {
+            String pageUrl = (i == 1) ? baseUrl : baseUrl + "/page" + i + "/";
+
+            System.out.println("Загружаем страницу: " + pageUrl);
+
+            Document pageHtml = pageLoader.loadPage(pageUrl);
+            List<Book> booksOnPage = parsePage(pageHtml);
+
+            System.out.println("Найдено книг на странице " + i + ": " + booksOnPage.size());
+
+            allBooks.addAll(booksOnPage);
+        }
+        return allBooks;
+    }
+
+    private ArrayList<Book> parsePage(Document htmlPage) {
         Elements containers = htmlPage.select("div.content__main__articles--item");
 
         final var books = new ArrayList<Book>();

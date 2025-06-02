@@ -1,7 +1,7 @@
 package com.repin.audiobookcollector.collector;
 
 import com.repin.audiobookcollector.model.Book;
-import com.repin.audiobookcollector.parser.BookParserResolver;
+import com.repin.audiobookcollector.parser.BookCollectorResolver;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -12,18 +12,16 @@ import java.util.List;
 
 public class BookCollector {
 
-    private final BookParserResolver bookParserResolver;
+    private final BookCollectorResolver bookCollectorResolver;
 
-    public BookCollector(BookParserResolver bookParserResolver) {
-        this.bookParserResolver = bookParserResolver;
+    public BookCollector(BookCollectorResolver bookCollectorResolver) {
+        this.bookCollectorResolver = bookCollectorResolver;
     }
 
-    public List<Book> fetchBooks(String url) {
-        Document htmlPage = loadPage(url);
-
+    public List<Book> fetchBooks(String url, Integer pagesToLoad) {
         try {
-            final var parser = bookParserResolver.resolve(url);
-            return new ArrayList<>(parser.parsePage(htmlPage));
+            final var collector = bookCollectorResolver.resolve(url);
+            return new ArrayList<>(collector.collectPages(url, pagesToLoad));
         } catch (URISyntaxException e) {
             throw new RuntimeException("Не получилось распарсить книги: " + e.getMessage());
         }

@@ -4,11 +4,11 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
 
-public class BookParserResolver {
+public class BookCollectorResolver {
 
-    private final Map<String, BookSiteParser> PARSERS = Map.of("akniga.org", new AknigaBookSiteParser());
+    private final Map<String, BookSiteCollector> COLLECTORS = Map.of("akniga.org", new AknigaBookSiteCollector());
 
-    public BookSiteParser resolve(String url) throws URISyntaxException {
+    public BookSiteCollector resolve(String url) throws URISyntaxException {
         URI uri = new URI(url);
         String host = uri.getHost();
 
@@ -16,7 +16,7 @@ public class BookParserResolver {
             throw new IllegalArgumentException("Некорректный URL: " + url);
         }
         host = host.toLowerCase();
-        for (Map.Entry<String, BookSiteParser> entry : PARSERS.entrySet()) {
+        for (Map.Entry<String, BookSiteCollector> entry : COLLECTORS.entrySet()) {
             if (host.contains(entry.getKey())) {
                 return entry.getValue();
             }

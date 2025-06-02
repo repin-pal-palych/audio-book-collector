@@ -1,12 +1,11 @@
 package com.repin.audiobookcollector.parser;
 
 import com.repin.audiobookcollector.model.Book;
-import org.jsoup.nodes.Document;
 
 import java.util.Collection;
 
-public interface BookSiteParser {
+public interface BookSiteCollector {
 
-    Collection<Book> parsePage(Document htmlPage);
+    Collection<Book> collectPages(String url, Integer pagesToLoad);
 
 }
