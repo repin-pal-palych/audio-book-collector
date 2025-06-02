@@ -38,7 +38,8 @@ public class AknigaBookSiteCollector implements BookSiteCollector {
         return allBooks;
     }
 
-    private ArrayList<Book> parsePage(Document htmlPage) {
+    @Override
+    public ArrayList<Book> parsePage(Document htmlPage) {
         Elements containers = htmlPage.select("div.content__main__articles--item");
 
         final var books = new ArrayList<Book>();
